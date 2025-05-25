@@ -1,0 +1,144 @@
+﻿<Window x:Class="ProjectManager.WPF.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+        xmlns:local="clr-namespace:ProjectManager.WPF"
+        xmlns:viewModels="clr-namespace:ProjectManager.WPF.ViewModels"
+        mc:Ignorable="d"
+        Title="Project Manager"
+        Height="500"
+        Width="750" 
+        WindowStartupLocation="CenterScreen"
+        >
+
+    <Window.DataContext>
+        <viewModels:MainViewModel />
+    </Window.DataContext>
+    <Grid Margin="20">
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+
+        <Grid Row="0">
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="3*" />
+            </Grid.ColumnDefinitions>
+
+            <Grid Column="0">
+                <ui:Button Content="添加"
+                           Command="{Binding AddProjectCommand}"
+                           Margin="20 10">
+                </ui:Button>
+            </Grid>
+
+            <Grid Column="1">
+                <ui:Button Content="设置"
+                           Command="{Binding EditSettingsCommand}"
+                           Margin="20 10">
+                </ui:Button>
+            </Grid>
+
+            <Grid Column="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+
+
+                <StackPanel Grid.Row="0" Orientation="Horizontal">
+                    <Label Content="Svn地址："></Label>
+                    <Label Content="{Binding SvnPrefix}"></Label>
+
+                </StackPanel>
+
+
+                <StackPanel Grid.Row="1" Orientation="Horizontal">
+                    <Label Content="本地地址："></Label>
+                    <Label Content="{Binding LocalPrefix}"></Label>
+                </StackPanel>
+            </Grid>
+
+        </Grid>
+
+
+
+
+        <ui:ListView  Grid.Row="1"
+                      ItemsSource="{Binding ProjectCollection}"
+                      Margin="5">
+
+
+            <ui:ListView.View>
+
+                <GridView>
+                    <GridViewColumn Header="项目名称"
+                                    Width="350">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding}"
+                                           VerticalAlignment="Center" />
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+
+                    <GridViewColumn Header="操作"
+                                    Width="400">
+
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal"
+                                            HorizontalAlignment="Center"
+                                            Margin="3">
+                                    <!--文件管理打开-->
+                                    <ui:Button
+                                            Command="{Binding DataContext.OpenInExplorerCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                               CommandParameter="{Binding}">
+                                        <ui:SymbolIcon Symbol="Folder20" />
+                                    </ui:Button>
+
+                                    <!--浏览器打开-->
+                                    <ui:Button
+                                            Command="{Binding DataContext.OpenInBrowserCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                               CommandParameter="{Binding}">
+                                        <ui:SymbolIcon Symbol="Globe20" />
+                                    </ui:Button>
+
+                                    <!--修改名称-->
+
+                                    <ui:Button
+                                            Command="{Binding DataContext.EditProjectCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                               CommandParameter="{Binding}">
+                                        <ui:SymbolIcon Symbol="Edit20" />
+                                    </ui:Button>
+
+                                    <!--删除项目-->
+                                    <ui:Button
+                                            Command="{Binding DataContext.DeleteProjectCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                               CommandParameter="{Binding}">
+                                        <ui:SymbolIcon Symbol="Delete20" />
+                                    </ui:Button>
+
+                                </StackPanel>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                </GridView>
+
+            </ui:ListView.View>
+
+
+
+        </ui:ListView>
+
+
+    </Grid>
+</Window>
